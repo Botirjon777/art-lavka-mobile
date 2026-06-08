@@ -7,6 +7,7 @@ import '../../bootstrap/core_providers.dart';
 import '../../bootstrap/result_x.dart';
 import '../../l10n/l10n.dart';
 import '../../ui/async_views.dart';
+import '../../ui/cart_badge.dart';
 import 'catalog_controller.dart';
 import 'widgets/product_card.dart';
 
@@ -46,7 +47,7 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
     final listings = ref.watch(listingsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.catalogTitle)),
+      appBar: AppBar(title: Text(t.catalogTitle), actions: const [CartBadge()]),
       body: Column(
         children: [
           const _CategoryFilter(),

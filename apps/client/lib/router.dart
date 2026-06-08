@@ -7,6 +7,9 @@ import 'features/auth/otp_page.dart';
 import 'features/auth/profile_completion_page.dart';
 import 'features/auth/register_page.dart';
 import 'features/auth/welcome_page.dart';
+import 'features/cart/cart_page.dart';
+import 'features/cart/checkout_page.dart';
+import 'features/cart/order_success_page.dart';
 import 'features/catalog/catalog_page.dart';
 import 'features/home/home_page.dart';
 import 'features/product/product_page.dart';
@@ -54,6 +57,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/product/:id',
         builder: (_, state) =>
             ProductPage(listingId: state.pathParameters['id']!),
+      ),
+      GoRoute(path: '/cart', builder: (_, _) => const CartPage()),
+      GoRoute(path: '/checkout', builder: (_, _) => const CheckoutPage()),
+      GoRoute(
+        path: '/order-success/:id',
+        builder: (_, state) =>
+            OrderSuccessPage(orderId: state.pathParameters['id']!),
       ),
     ],
   );
