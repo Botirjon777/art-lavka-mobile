@@ -41,6 +41,7 @@ export 'services/token_store.dart';
 // Repositories
 export 'repositories/catalog_repository.dart';
 export 'repositories/design_repository.dart';
+export 'repositories/designer_repository.dart';
 export 'repositories/earnings_repository.dart';
 export 'repositories/order_repository.dart';
 export 'repositories/payout_repository.dart';
