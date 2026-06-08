@@ -64,5 +64,21 @@
   "productNoReviews": "Пока нет отзывов.",
   "ratingCount": "{count} отзывов",
   "addToCart": "В корзину",
-  "addedToCart": "Добавлено в корзину."
+  "addedToCart": "Добавлено в корзину.",
+
+  "cartTitle": "Корзина",
+  "cartEmpty": "Корзина пуста. Найдите что-то по душе.",
+  "cartSubtotal": "Сумма",
+  "cartCheckout": "Оформить",
+  "cartItemUnavailable": "Этот товар больше недоступен и удалён из корзины.",
+  "checkoutTitle": "Оформление",
+  "checkoutAddress": "Адрес доставки",
+  "checkoutAddressHint": "Улица, дом, квартира, ориентир",
+  "checkoutPayment": "Способ оплаты",
+  "checkoutPlaceOrder": "Оформить заказ",
+  "checkoutTotal": "Итого",
+  "errPaymentFailed": "Платёж не прошёл. Деньги не списаны — попробуйте снова.",
+  "orderPlacedTitle": "Заказ оформлен!",
+  "orderPlacedSubtitle": "Мы готовим его.",
+  "orderNumber": "Заказ №{id}"
 }

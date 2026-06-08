@@ -79,5 +79,24 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "addToCart": "Add to cart",
-  "addedToCart": "Added to cart."
+  "addedToCart": "Added to cart.",
+
+  "cartTitle": "Cart",
+  "cartEmpty": "Your cart is empty. Find something you love.",
+  "cartSubtotal": "Subtotal",
+  "cartCheckout": "Checkout",
+  "cartItemUnavailable": "This item is no longer available and was removed from your cart.",
+  "checkoutTitle": "Checkout",
+  "checkoutAddress": "Delivery address",
+  "checkoutAddressHint": "Street, house, apartment, landmark",
+  "checkoutPayment": "Payment method",
+  "checkoutPlaceOrder": "Place order",
+  "checkoutTotal": "Total",
+  "errPaymentFailed": "Payment didn't go through. No money was taken — please try again.",
+  "orderPlacedTitle": "Order placed!",
+  "orderPlacedSubtitle": "We're getting it ready.",
+  "orderNumber": "Order #{id}",
+  "@orderNumber": {
+    "placeholders": { "id": { "type": "String" } }
+  }
 }

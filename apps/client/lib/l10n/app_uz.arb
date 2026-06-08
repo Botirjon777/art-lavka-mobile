@@ -64,5 +64,21 @@
   "productNoReviews": "Hozircha sharhlar yo'q.",
   "ratingCount": "{count} ta sharh",
   "addToCart": "Savatga",
-  "addedToCart": "Savatga qo'shildi."
+  "addedToCart": "Savatga qo'shildi.",
+
+  "cartTitle": "Savat",
+  "cartEmpty": "Savatingiz bo'sh. O'zingizga yoqqanini toping.",
+  "cartSubtotal": "Jami",
+  "cartCheckout": "Rasmiylashtirish",
+  "cartItemUnavailable": "Bu mahsulot endi mavjud emas va savatdan olib tashlandi.",
+  "checkoutTitle": "Rasmiylashtirish",
+  "checkoutAddress": "Yetkazib berish manzili",
+  "checkoutAddressHint": "Ko'cha, uy, xonadon, mo'ljal",
+  "checkoutPayment": "To'lov usuli",
+  "checkoutPlaceOrder": "Buyurtma berish",
+  "checkoutTotal": "Jami",
+  "errPaymentFailed": "To'lov amalga oshmadi. Pul yechilmadi — qayta urinib ko'ring.",
+  "orderPlacedTitle": "Buyurtma qabul qilindi!",
+  "orderPlacedSubtitle": "Tayyorlamoqdamiz.",
+  "orderNumber": "Buyurtma #{id}"
 }
