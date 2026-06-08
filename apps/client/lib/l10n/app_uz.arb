@@ -52,5 +52,17 @@
   "errValidation": "Belgilangan maydonlarni tekshiring.",
   "errSessionExpired": "Tizimdan chiqdingiz. Iltimos, qayta kiring.",
   "errSellerNotVerified": "Sotuvchi hisobingiz hali ko'rib chiqilmoqda.",
-  "errUnauthorized": "Davom etish uchun tizimga kiring."
+  "errUnauthorized": "Davom etish uchun tizimga kiring.",
+
+  "navBrowseCatalog": "Katalog",
+  "catalogTitle": "Katalog",
+  "catalogAll": "Hammasi",
+  "catalogEmpty": "Bu yerda hozircha bo'sh. Keyinroq qarang.",
+  "searchEmpty": "Hech narsa topilmadi. Boshqa so'z bilan urinib ko'ring.",
+  "productByDesigner": "{designer} tomonidan",
+  "productReviews": "Sharhlar",
+  "productNoReviews": "Hozircha sharhlar yo'q.",
+  "ratingCount": "{count} ta sharh",
+  "addToCart": "Savatga",
+  "addedToCart": "Savatga qo'shildi."
 }
