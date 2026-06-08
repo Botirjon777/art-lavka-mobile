@@ -101,7 +101,76 @@ async function main(): Promise<void> {
     });
   }
 
-  console.log(`Seeded ${categories.length} categories, ${products.length} product types.`);
+  // --- Demo storefront (so the catalog/home actually show products) ---------
+  const demoUser = await prisma.user.upsert({
+    where: { phone: '+998900000001' },
+    update: { role: 'designer' },
+    create: { phone: '+998900000001', fullName: 'Demo Studio', role: 'designer' },
+  });
+  await prisma.designerProfile.upsert({
+    where: { userId: demoUser.id },
+    update: { kycStatus: 'verified' },
+    create: {
+      userId: demoUser.id,
+      slug: 'demo-studio',
+      displayName: 'Demo Studio',
+      kycStatus: 'verified',
+      payoutMethod: 'card',
+    },
+  });
+
+  const tshirt = await prisma.productType.findUnique({ where: { slug: 'tshirt' } });
+  const cup = await prisma.productType.findUnique({ where: { slug: 'cup' } });
+
+  const demoDesigns = [
+    { id: '00000000-0000-4000-8000-0000000000d1', title: 'Pixel Cat', cat: 'gamers' },
+    { id: '00000000-0000-4000-8000-0000000000d2', title: 'Doge Meme', cat: 'memes' },
+    { id: '00000000-0000-4000-8000-0000000000d3', title: 'Laughing Sun', cat: 'funny' },
+    { id: '00000000-0000-4000-8000-0000000000d4', title: 'Anime Wave', cat: 'anime' },
+  ];
+
+  for (const d of demoDesigns) {
+    await prisma.design.upsert({
+      where: { id: d.id },
+      update: { status: 'approved' },
+      create: {
+        id: d.id,
+        designerId: demoUser.id,
+        title: d.title,
+        description: 'Demo print',
+        previewUrl: `https://picsum.photos/seed/${d.id}/600/600`,
+        printFilePath: 'print-files/demo.png',
+        widthPx: 3000,
+        heightPx: 3000,
+        status: 'approved',
+      },
+    });
+    const category = await prisma.category.findUnique({ where: { slug: d.cat } });
+    if (category) {
+      await prisma.designCategory.createMany({
+        data: [{ designId: d.id, categoryId: category.id }],
+        skipDuplicates: true,
+      });
+    }
+    for (const pt of [tshirt, cup]) {
+      if (!pt) continue;
+      await prisma.listing.upsert({
+        where: { designId_productTypeId: { designId: d.id, productTypeId: pt.id } },
+        update: { active: true },
+        create: {
+          designId: d.id,
+          productTypeId: pt.id,
+          royalty: pt.slug === 'cup' ? 15000n : 20000n,
+          active: true,
+        },
+      });
+    }
+  }
+
+  console.log(
+    `Seeded ${categories.length} categories, ${products.length} product types, ` +
+      `${demoDesigns.length} demo designs (Demo Studio).`,
+  );
 }
 
 main()

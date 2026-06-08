@@ -24,3 +24,8 @@ services:
         value: "true"
       - key: PAYMENTS_SANDBOX
         value: "true"
+      # Telegram OTP delivery (optional) — set in the dashboard.
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
