@@ -80,5 +80,9 @@
   "errPaymentFailed": "To'lov amalga oshmadi. Pul yechilmadi — qayta urinib ko'ring.",
   "orderPlacedTitle": "Buyurtma qabul qilindi!",
   "orderPlacedSubtitle": "Tayyorlamoqdamiz.",
-  "orderNumber": "Buyurtma #{id}"
+  "orderNumber": "Buyurtma #{id}",
+
+  "homeNewArrivals": "Yangi mahsulotlar",
+  "homeSeeAll": "Hammasi",
+  "homeFeedError": "Bo'limni yuklab bo'lmadi."
 }
