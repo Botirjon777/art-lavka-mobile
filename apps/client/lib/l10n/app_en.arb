@@ -102,5 +102,21 @@
 
   "homeNewArrivals": "New arrivals",
   "homeSeeAll": "See all",
-  "homeFeedError": "Couldn't load this section."
+  "homeFeedError": "Couldn't load this section.",
+
+  "navOrders": "My orders",
+  "ordersTitle": "Orders",
+  "ordersEmpty": "No orders yet. Your future purchases show up here.",
+  "orderStatusPending": "Awaiting payment",
+  "orderStatusPaid": "Paid",
+  "orderStatusInProduction": "In production",
+  "orderStatusShipped": "Shipped",
+  "orderStatusDelivered": "Delivered",
+  "orderStatusCancelled": "Cancelled",
+  "orderStatusRefunded": "Refunded",
+  "rate": "Rate",
+  "reviewTitle": "Rate this item",
+  "reviewCommentHint": "Add a comment (optional)",
+  "reviewSubmit": "Submit",
+  "reviewThanks": "Thanks for your review."
 }

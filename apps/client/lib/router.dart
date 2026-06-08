@@ -12,6 +12,8 @@ import 'features/cart/checkout_page.dart';
 import 'features/cart/order_success_page.dart';
 import 'features/catalog/catalog_page.dart';
 import 'features/home/home_page.dart';
+import 'features/orders/order_detail_page.dart';
+import 'features/orders/orders_list_page.dart';
 import 'features/product/product_page.dart';
 
 /// Auth/onboarding routes a signed-out user may visit.
@@ -60,6 +62,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/cart', builder: (_, _) => const CartPage()),
       GoRoute(path: '/checkout', builder: (_, _) => const CheckoutPage()),
+      GoRoute(path: '/orders', builder: (_, _) => const OrdersListPage()),
+      GoRoute(
+        path: '/orders/:id',
+        builder: (_, state) =>
+            OrderDetailPage(orderId: state.pathParameters['id']!),
+      ),
       GoRoute(
         path: '/order-success/:id',
         builder: (_, state) =>

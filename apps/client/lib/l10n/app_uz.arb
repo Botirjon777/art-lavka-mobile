@@ -84,5 +84,21 @@
 
   "homeNewArrivals": "Yangi mahsulotlar",
   "homeSeeAll": "Hammasi",
-  "homeFeedError": "Bo'limni yuklab bo'lmadi."
+  "homeFeedError": "Bo'limni yuklab bo'lmadi.",
+
+  "navOrders": "Buyurtmalarim",
+  "ordersTitle": "Buyurtmalar",
+  "ordersEmpty": "Hozircha buyurtmalar yo'q. Xaridlaringiz shu yerda paydo bo'ladi.",
+  "orderStatusPending": "To'lov kutilmoqda",
+  "orderStatusPaid": "To'langan",
+  "orderStatusInProduction": "Ishlab chiqarishda",
+  "orderStatusShipped": "Jo'natilgan",
+  "orderStatusDelivered": "Yetkazilgan",
+  "orderStatusCancelled": "Bekor qilingan",
+  "orderStatusRefunded": "Qaytarilgan",
+  "rate": "Baholash",
+  "reviewTitle": "Mahsulotni baholang",
+  "reviewCommentHint": "Izoh qo'shing (ixtiyoriy)",
+  "reviewSubmit": "Yuborish",
+  "reviewThanks": "Sharhingiz uchun rahmat."
 }
