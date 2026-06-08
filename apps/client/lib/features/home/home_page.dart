@@ -1,6 +1,7 @@
 import 'package:artlavka_core/artlavka_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../bootstrap/core_providers.dart';
 import '../../l10n/l10n.dart';
@@ -26,6 +27,11 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(t.appName),
         actions: [
+          IconButton(
+            tooltip: t.navOrders,
+            icon: const Icon(Icons.receipt_long_outlined),
+            onPressed: () => context.push('/orders'),
+          ),
           const CartBadge(),
           IconButton(
             tooltip: t.actionSignOut,

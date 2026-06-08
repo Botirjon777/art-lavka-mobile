@@ -24,7 +24,7 @@ class _OrderSuccessPageState extends State<OrderSuccessPage> {
   void initState() {
     super.initState();
     _timer = Timer(const Duration(milliseconds: 1800), () {
-      if (mounted) context.go('/home');
+      if (mounted) context.go('/orders/${widget.orderId}');
     });
   }
 

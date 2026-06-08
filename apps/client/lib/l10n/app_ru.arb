@@ -84,5 +84,21 @@
 
   "homeNewArrivals": "Новинки",
   "homeSeeAll": "Все",
-  "homeFeedError": "Не удалось загрузить раздел."
+  "homeFeedError": "Не удалось загрузить раздел.",
+
+  "navOrders": "Мои заказы",
+  "ordersTitle": "Заказы",
+  "ordersEmpty": "Заказов пока нет. Здесь появятся ваши покупки.",
+  "orderStatusPending": "Ожидает оплаты",
+  "orderStatusPaid": "Оплачен",
+  "orderStatusInProduction": "В производстве",
+  "orderStatusShipped": "Отправлен",
+  "orderStatusDelivered": "Доставлен",
+  "orderStatusCancelled": "Отменён",
+  "orderStatusRefunded": "Возврат",
+  "rate": "Оценить",
+  "reviewTitle": "Оцените товар",
+  "reviewCommentHint": "Добавьте комментарий (необязательно)",
+  "reviewSubmit": "Отправить",
+  "reviewThanks": "Спасибо за отзыв."
 }

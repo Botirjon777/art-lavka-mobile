@@ -10,6 +10,18 @@ extension L10nX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 }
 
+/// Localized label for an [OrderStatus] (orders tracking / SPEC §11).
+String orderStatusLabel(AppLocalizations t, OrderStatus status) =>
+    switch (status) {
+      OrderStatus.pending => t.orderStatusPending,
+      OrderStatus.paid => t.orderStatusPaid,
+      OrderStatus.inProduction => t.orderStatusInProduction,
+      OrderStatus.shipped => t.orderStatusShipped,
+      OrderStatus.delivered => t.orderStatusDelivered,
+      OrderStatus.cancelled => t.orderStatusCancelled,
+      OrderStatus.refunded => t.orderStatusRefunded,
+    };
+
 /// Map a repository [FailureCode] to a localized, user-facing message
 /// (SPEC §7/§11). Unknown/none falls back to the generic server message.
 String localizedFailure(AppLocalizations t, String? code) => switch (code) {
