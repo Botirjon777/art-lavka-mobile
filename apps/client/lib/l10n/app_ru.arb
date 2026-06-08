@@ -80,5 +80,9 @@
   "errPaymentFailed": "Платёж не прошёл. Деньги не списаны — попробуйте снова.",
   "orderPlacedTitle": "Заказ оформлен!",
   "orderPlacedSubtitle": "Мы готовим его.",
-  "orderNumber": "Заказ №{id}"
+  "orderNumber": "Заказ №{id}",
+
+  "homeNewArrivals": "Новинки",
+  "homeSeeAll": "Все",
+  "homeFeedError": "Не удалось загрузить раздел."
 }

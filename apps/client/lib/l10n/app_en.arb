@@ -98,5 +98,9 @@
   "orderNumber": "Order #{id}",
   "@orderNumber": {
     "placeholders": { "id": { "type": "String" } }
-  }
+  },
+
+  "homeNewArrivals": "New arrivals",
+  "homeSeeAll": "See all",
+  "homeFeedError": "Couldn't load this section."
 }
