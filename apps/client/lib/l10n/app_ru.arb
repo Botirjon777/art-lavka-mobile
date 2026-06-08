@@ -52,5 +52,17 @@
   "errValidation": "Проверьте выделенные поля.",
   "errSessionExpired": "Вы вышли из аккаунта. Войдите снова.",
   "errSellerNotVerified": "Ваш аккаунт продавца на проверке.",
-  "errUnauthorized": "Войдите, чтобы продолжить."
+  "errUnauthorized": "Войдите, чтобы продолжить.",
+
+  "navBrowseCatalog": "Каталог",
+  "catalogTitle": "Каталог",
+  "catalogAll": "Все",
+  "catalogEmpty": "Здесь пока пусто. Загляните позже.",
+  "searchEmpty": "Ничего не найдено. Попробуйте другое слово.",
+  "productByDesigner": "от {designer}",
+  "productReviews": "Отзывы",
+  "productNoReviews": "Пока нет отзывов.",
+  "ratingCount": "{count} отзывов",
+  "addToCart": "В корзину",
+  "addedToCart": "Добавлено в корзину."
 }

@@ -61,5 +61,23 @@
   "errValidation": "Please check the highlighted fields.",
   "errSessionExpired": "You've been signed out. Please log in again.",
   "errSellerNotVerified": "Your seller account is still under review.",
-  "errUnauthorized": "Please log in to continue."
+  "errUnauthorized": "Please log in to continue.",
+
+  "navBrowseCatalog": "Browse catalog",
+  "catalogTitle": "Catalog",
+  "catalogAll": "All",
+  "catalogEmpty": "Nothing here yet. Check back soon.",
+  "searchEmpty": "Nothing matched that. Try another word.",
+  "productByDesigner": "by {designer}",
+  "@productByDesigner": {
+    "placeholders": { "designer": { "type": "String" } }
+  },
+  "productReviews": "Reviews",
+  "productNoReviews": "No reviews yet.",
+  "ratingCount": "{count} reviews",
+  "@ratingCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "addToCart": "Add to cart",
+  "addedToCart": "Added to cart."
 }
