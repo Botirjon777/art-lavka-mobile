@@ -1,28 +1,43 @@
 import 'package:artlavka_core/artlavka_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The wired [ArtlavkaCore]. Overridden in `main()` once the REST API client
-/// is initialized.
-final coreProvider = Provider<ArtlavkaCore>(
-  (ref) => throw StateError(
-    'coreProvider was read before main() overrode it. '
-    'Ensure the build has --dart-define=API_BASE_URL=...',
-  ),
+import 'app_session.dart';
+import 'mock_auth_service.dart';
+import 'mock_designer_repository.dart';
+
+/// The wired [ArtlavkaCore], or `null` when the build has no backend config.
+final coreProvider = Provider<ArtlavkaCore?>((ref) => null);
+
+/// Real Supabase-less REST auth when configured; mock otherwise (or MOCK_AUTH).
+final authServiceProvider = Provider<AuthService>((ref) {
+  final core = ref.watch(coreProvider);
+  if (core == null || Env.mockAuth) return MockAuthService();
+  return core.auth;
+});
+
+/// Designer onboarding/profile repository (real or mock).
+final designerRepositoryProvider = Provider<DesignerRepository>((ref) {
+  final core = ref.watch(coreProvider);
+  if (core == null || Env.mockAuth) return MockDesignerRepository();
+  return core.designer;
+});
+
+/// App-wide session (auth + KYC profile) the router watches.
+final appSessionProvider = Provider<AppSession>((ref) {
+  final session = AppSession();
+  ref.onDispose(session.dispose);
+  return session;
+});
+
+/// Current UI locale (default RU).
+final localeProvider = NotifierProvider<LocaleController, Locale>(
+  LocaleController.new,
 );
 
-// Narrow slices used by Studio controllers.
-final authServiceProvider = Provider<AuthService>(
-  (ref) => ref.watch(coreProvider).auth,
-);
-final designRepositoryProvider = Provider<DesignRepository>(
-  (ref) => ref.watch(coreProvider).designs,
-);
-final earningsRepositoryProvider = Provider<EarningsRepository>(
-  (ref) => ref.watch(coreProvider).earnings,
-);
-final payoutRepositoryProvider = Provider<PayoutRepository>(
-  (ref) => ref.watch(coreProvider).payouts,
-);
-final storageServiceProvider = Provider<StorageService>(
-  (ref) => ref.watch(coreProvider).storage,
-);
+class LocaleController extends Notifier<Locale> {
+  @override
+  Locale build() => const Locale('ru');
+
+  void setLanguage(String code) => state = Locale(code);
+}
