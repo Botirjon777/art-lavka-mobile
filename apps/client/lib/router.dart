@@ -7,7 +7,9 @@ import 'features/auth/otp_page.dart';
 import 'features/auth/profile_completion_page.dart';
 import 'features/auth/register_page.dart';
 import 'features/auth/welcome_page.dart';
+import 'features/catalog/catalog_page.dart';
 import 'features/home/home_page.dart';
+import 'features/product/product_page.dart';
 
 /// Auth/onboarding routes a signed-out user may visit.
 const _authRoutes = {'/welcome', '/login', '/register', '/otp'};
@@ -47,6 +49,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const ProfileCompletionPage(),
       ),
       GoRoute(path: '/home', builder: (_, _) => const HomePage()),
+      GoRoute(path: '/catalog', builder: (_, _) => const CatalogPage()),
+      GoRoute(
+        path: '/product/:id',
+        builder: (_, state) =>
+            ProductPage(listingId: state.pathParameters['id']!),
+      ),
     ],
   );
 });

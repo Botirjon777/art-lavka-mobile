@@ -1,6 +1,7 @@
 import 'package:artlavka_core/artlavka_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../bootstrap/core_providers.dart';
 import '../../l10n/l10n.dart';
@@ -48,6 +49,12 @@ class HomePage extends ConsumerWidget {
                 t.homeFoundationNote,
                 style: text.bodyMedium,
                 textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppTheme.space * 3),
+              FilledButton.icon(
+                onPressed: () => context.push('/catalog'),
+                icon: const Icon(Icons.storefront_outlined),
+                label: Text(t.navBrowseCatalog),
               ),
             ],
           ),
