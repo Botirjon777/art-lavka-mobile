@@ -5,24 +5,34 @@ import 'package:go_router/go_router.dart';
 
 import '../../bootstrap/core_providers.dart';
 import '../../l10n/l10n.dart';
+import '../../ui/cart_badge.dart';
 import '../auth/auth_controller.dart';
+import '../catalog/catalog_controller.dart';
+import 'home_controller.dart';
+import 'widgets/banner_carousel.dart';
+import 'widgets/feed_section.dart';
 
-/// Authenticated landing. Placeholder until Step 4 builds the real home
-/// (banners + feeds). Confirms the session works and offers sign-out.
+/// Home: banners + "New arrivals" + a shelf per category (SPEC §4). Each section
+/// loads independently and hides itself when empty/erroring (never a blank wall).
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.l10n;
-    final text = Theme.of(context).textTheme;
-    final user = ref.watch(appSessionProvider).user;
-    final name = user?.fullName;
+    final lang = ref.watch(localeProvider).languageCode;
+    final categories = ref.watch(categoriesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(t.appName),
         actions: [
+          IconButton(
+            tooltip: t.navOrders,
+            icon: const Icon(Icons.receipt_long_outlined),
+            onPressed: () => context.push('/orders'),
+          ),
+          const CartBadge(),
           IconButton(
             tooltip: t.actionSignOut,
             icon: const Icon(Icons.logout),
@@ -31,33 +41,25 @@ class HomePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppTheme.space * 3),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                (name != null && name.isNotEmpty)
-                    ? t.homeWelcome(name)
-                    : t.homeWelcomeGeneric,
-                style: text.headlineMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppTheme.space),
-              Text(
-                t.homeFoundationNote,
-                style: text.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppTheme.space * 3),
-              FilledButton.icon(
-                onPressed: () => context.push('/catalog'),
-                icon: const Icon(Icons.storefront_outlined),
-                label: Text(t.navBrowseCatalog),
-              ),
-            ],
-          ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(bannersProvider);
+          ref.invalidate(categoriesProvider);
+          ref.invalidate(feedListingsProvider);
+        },
+        child: ListView(
+          children: [
+            const SizedBox(height: AppTheme.space * 2),
+            const BannerCarousel(),
+            FeedSection(title: t.homeNewArrivals),
+            ...categories
+                .maybeWhen(data: (c) => c, orElse: () => const <Category>[])
+                .map(
+                  (c) =>
+                      FeedSection(title: c.nameFor(lang), categorySlug: c.slug),
+                ),
+            const SizedBox(height: AppTheme.space * 3),
+          ],
         ),
       ),
     );

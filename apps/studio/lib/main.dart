@@ -7,26 +7,25 @@ import 'bootstrap/core_providers.dart';
 
 /// Entry point for ART-LAVKA Studio (seller app).
 ///
-/// Same bootstrap as the client: initialize the shared core when configured and
-/// inject it via a Riverpod override. After auth, Studio routes into onboarding
-/// and keeps the dashboard locked until `kyc_status = verified` (SPEC §9).
+/// Initializes the shared core (REST API client) when configured and not in
+/// mock-auth mode, then injects it via a Riverpod override. After login, the
+/// router gates the dashboard until `kyc_status = verified` (SPEC §9).
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ArtlavkaCore? core;
-  Object? initError;
-  if (Env.isConfigured) {
+  if (Env.isConfigured && !Env.mockAuth) {
     try {
       core = await ArtlavkaCore.initialize();
-    } catch (error) {
-      initError = error;
+    } catch (_) {
+      core = null;
     }
   }
 
   runApp(
     ProviderScope(
       overrides: [if (core != null) coreProvider.overrideWithValue(core)],
-      child: ArtLavkaStudioApp(initError: initError),
+      child: const ArtLavkaStudioApp(),
     ),
   );
 }

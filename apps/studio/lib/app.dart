@@ -1,80 +1,48 @@
 import 'package:artlavka_core/artlavka_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Root widget for ART-LAVKA Studio. The onboarding gate + dashboard land in
-/// later milestones (SPEC §14); this is the foundation shell.
-class ArtLavkaStudioApp extends StatelessWidget {
-  const ArtLavkaStudioApp({super.key, this.initError});
+import 'bootstrap/core_providers.dart';
+import 'l10n/l10n.dart';
+import 'router.dart';
 
-  final Object? initError;
+/// Root of ART-LAVKA Studio: themed, localized, router-driven with the KYC gate.
+class ArtLavkaStudioApp extends ConsumerStatefulWidget {
+  const ArtLavkaStudioApp({super.key});
+
+  @override
+  ConsumerState<ArtLavkaStudioApp> createState() => _ArtLavkaStudioAppState();
+}
+
+class _ArtLavkaStudioAppState extends ConsumerState<ArtLavkaStudioApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Seed an existing backend session so the router lands on the right gate.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final auth = ref.read(authServiceProvider);
+      if (!auth.isSignedIn) return;
+      final user = (await auth.currentUser()).valueOrNull;
+      if (user == null || !mounted) return;
+      final session = ref.read(appSessionProvider)..setUser(user);
+      final profile = await ref.read(designerRepositoryProvider).myProfile();
+      session.setProfile(profile.valueOrNull);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final router = ref.watch(routerProvider);
+    final locale = ref.watch(localeProvider);
+
+    return MaterialApp.router(
       title: 'ART-LAVKA Studio',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
-      home: _FoundationHome(initError: initError),
-    );
-  }
-}
-
-class _FoundationHome extends StatelessWidget {
-  const _FoundationHome({this.initError});
-  final Object? initError;
-
-  @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-    final configured = Env.isConfigured && initError == null;
-
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppTheme.space * 3),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('ART-LAVKA', style: text.displaySmall),
-              Text(
-                'Studio',
-                style: text.titleLarge?.copyWith(color: AppColors.accent),
-              ),
-              const SizedBox(height: AppTheme.space),
-              Text(
-                'Seller app — foundation ready.\n'
-                'Dashboard stays locked until KYC is verified.',
-                style: text.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppTheme.space * 3),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.space * 2,
-                  vertical: AppTheme.space,
-                ),
-                decoration: BoxDecoration(
-                  color: (configured ? AppColors.success : AppColors.warning)
-                      .withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(AppTheme.radius),
-                  border: Border.all(
-                    color: configured ? AppColors.success : AppColors.warning,
-                  ),
-                ),
-                child: Text(
-                  configured
-                      ? 'Backend connected'
-                      : 'No backend config (run with --dart-define)',
-                  style: text.bodyMedium?.copyWith(
-                    color: configured ? AppColors.success : AppColors.warning,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      routerConfig: router,
     );
   }
 }

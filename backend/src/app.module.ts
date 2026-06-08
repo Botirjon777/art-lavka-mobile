@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CatalogModule } from './catalog/catalog.module';
+import { DesignersModule } from './designers/designers.module';
 import { DesignsModule } from './designs/designs.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { ModerationModule } from './moderation/moderation.module';
@@ -43,6 +44,7 @@ import { PrismaModule } from './prisma/prisma.module';
     LedgerModule,
     PayoutsModule,
     DesignsModule,
+    DesignersModule,
     ModerationModule,
     StorageModule,
     ReviewsModule,

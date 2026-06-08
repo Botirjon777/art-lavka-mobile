@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../bootstrap/result_x.dart';
 import '../../l10n/l10n.dart';
 import '../../ui/async_views.dart';
+import '../../ui/cart_badge.dart';
+import '../cart/cart_controller.dart';
 import 'product_controller.dart';
 
 /// Product page: mockup, price, designer, rating, reviews, add-to-cart (SPEC §4).
@@ -20,7 +22,10 @@ class ProductPage extends ConsumerWidget {
     final listing = ref.watch(listingProvider(listingId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(listing.valueOrNull?.title ?? t.appName)),
+      appBar: AppBar(
+        title: Text(listing.valueOrNull?.title ?? t.appName),
+        actions: const [CartBadge()],
+      ),
       body: listing.when(
         loading: () => const LoadingView(),
         error: (e, _) => ErrorRetryView(
@@ -86,9 +91,10 @@ class _Detail extends ConsumerWidget {
         const SizedBox(height: AppTheme.space * 2),
         FilledButton.icon(
           onPressed: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(t.addedToCart)));
+            ref.read(cartProvider.notifier).addListing(listing);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(t.addedToCart)));
           },
           icon: const Icon(Icons.add_shopping_cart),
           label: Text(t.addToCart),

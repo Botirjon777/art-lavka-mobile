@@ -1,6 +1,7 @@
 import 'config/env.dart';
 import 'repositories/catalog_repository.dart';
 import 'repositories/design_repository.dart';
+import 'repositories/designer_repository.dart';
 import 'repositories/earnings_repository.dart';
 import 'repositories/order_repository.dart';
 import 'repositories/payout_repository.dart';
@@ -27,6 +28,7 @@ class ArtlavkaCore {
     required this.catalog,
     required this.orders,
     required this.designs,
+    required this.designer,
     required this.earnings,
     required this.payouts,
   });
@@ -44,6 +46,7 @@ class ArtlavkaCore {
   final CatalogRepository catalog;
   final OrderRepository orders;
   final DesignRepository designs;
+  final DesignerRepository designer;
   final EarningsRepository earnings;
   final PayoutRepository payouts;
 
@@ -63,6 +66,7 @@ class ArtlavkaCore {
       catalog: CatalogRepository(api),
       orders: OrderRepository(api),
       designs: DesignRepository(api),
+      designer: DesignerRepository(api),
       earnings: EarningsRepository(api),
       payouts: PayoutRepository(api),
     );

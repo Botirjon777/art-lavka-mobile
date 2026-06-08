@@ -54,3 +54,6 @@ final catalogRepositoryProvider = Provider<CatalogRepository>(
 final orderRepositoryProvider = Provider<OrderRepository>(
   (ref) => _requireCore(ref).orders,
 );
+final paymentServiceProvider = Provider<PaymentService>(
+  (ref) => _requireCore(ref).payments,
+);
