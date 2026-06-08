@@ -100,5 +100,14 @@
   "reviewTitle": "Mahsulotni baholang",
   "reviewCommentHint": "Izoh qo'shing (ixtiyoriy)",
   "reviewSubmit": "Yuborish",
-  "reviewThanks": "Sharhingiz uchun rahmat."
+  "reviewThanks": "Sharhingiz uchun rahmat.",
+
+  "navHome": "Bosh sahifa",
+  "navCatalog": "Katalog",
+  "navProfile": "Profil",
+  "profileTitle": "Profil",
+  "profileLanguage": "Til",
+  "profileBecomeSeller": "Sotuvchi bo'lish",
+  "profileBecomeSellerHint": "Dizayn yuklash va sotish uchun ART-LAVKA Studio ilovasidan foydalaning.",
+  "homeEmpty": "Bu yerda hozircha bo'sh — katalogni ko'ring."
 }

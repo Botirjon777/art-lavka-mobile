@@ -100,5 +100,14 @@
   "reviewTitle": "Оцените товар",
   "reviewCommentHint": "Добавьте комментарий (необязательно)",
   "reviewSubmit": "Отправить",
-  "reviewThanks": "Спасибо за отзыв."
+  "reviewThanks": "Спасибо за отзыв.",
+
+  "navHome": "Главная",
+  "navCatalog": "Каталог",
+  "navProfile": "Профиль",
+  "profileTitle": "Профиль",
+  "profileLanguage": "Язык",
+  "profileBecomeSeller": "Стать продавцом",
+  "profileBecomeSellerHint": "Используйте приложение ART-LAVKA Studio, чтобы загружать дизайны и продавать.",
+  "homeEmpty": "Здесь пока пусто — загляните в каталог."
 }

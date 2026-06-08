@@ -15,17 +15,14 @@ import 'features/home/home_page.dart';
 import 'features/orders/order_detail_page.dart';
 import 'features/orders/orders_list_page.dart';
 import 'features/product/product_page.dart';
+import 'features/profile/profile_page.dart';
+import 'ui/scaffold_with_nav.dart';
 
-/// Auth/onboarding routes a signed-out user may visit.
 const _authRoutes = {'/welcome', '/login', '/register', '/otp'};
-const _profileRoute = '/profile';
+const _completeRoute = '/complete-profile';
 
-/// The app router. Redirect guards (SPEC §7/§8):
-/// - signed out → only auth routes, else `/welcome`
-/// - signed in, no profile → forced to `/profile`
-/// - signed in, has profile → auth/profile routes bounce to `/home`
+/// App router with the auth gate + a bottom-nav shell for the main tabs.
 final routerProvider = Provider<GoRouter>((ref) {
-  // Read once for a stable instance; the session drives refresh via the listener.
   final session = ref.read(appSessionProvider);
 
   return GoRouter(
@@ -39,9 +36,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         return onAuth ? null : '/welcome';
       }
       if (!session.hasProfile) {
-        return loc == _profileRoute ? null : _profileRoute;
+        return loc == _completeRoute ? null : _completeRoute;
       }
-      if (onAuth || loc == _profileRoute) return '/home';
+      if (onAuth || loc == _completeRoute) return '/home';
       return null;
     },
     routes: [
@@ -50,11 +47,41 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(path: '/otp', builder: (_, _) => const OtpPage()),
       GoRoute(
-        path: _profileRoute,
+        path: _completeRoute,
         builder: (_, _) => const ProfileCompletionPage(),
       ),
-      GoRoute(path: '/home', builder: (_, _) => const HomePage()),
-      GoRoute(path: '/catalog', builder: (_, _) => const CatalogPage()),
+
+      // Bottom-nav shell: Home / Catalog / Orders / Profile.
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => ScaffoldWithNav(shell: shell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/home', builder: (_, _) => const HomePage()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/catalog', builder: (_, _) => const CatalogPage()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/orders',
+                builder: (_, _) => const OrdersListPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
+            ],
+          ),
+        ],
+      ),
+
+      // Full-screen routes pushed over the bottom bar.
       GoRoute(
         path: '/product/:id',
         builder: (_, state) =>
@@ -62,7 +89,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/cart', builder: (_, _) => const CartPage()),
       GoRoute(path: '/checkout', builder: (_, _) => const CheckoutPage()),
-      GoRoute(path: '/orders', builder: (_, _) => const OrdersListPage()),
       GoRoute(
         path: '/orders/:id',
         builder: (_, state) =>

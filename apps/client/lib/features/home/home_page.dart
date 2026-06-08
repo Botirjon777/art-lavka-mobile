@@ -1,12 +1,10 @@
 import 'package:artlavka_core/artlavka_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../bootstrap/core_providers.dart';
 import '../../l10n/l10n.dart';
 import '../../ui/cart_badge.dart';
-import '../auth/auth_controller.dart';
 import '../catalog/catalog_controller.dart';
 import 'home_controller.dart';
 import 'widgets/banner_carousel.dart';
@@ -24,23 +22,7 @@ class HomePage extends ConsumerWidget {
     final categories = ref.watch(categoriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.appName),
-        actions: [
-          IconButton(
-            tooltip: t.navOrders,
-            icon: const Icon(Icons.receipt_long_outlined),
-            onPressed: () => context.push('/orders'),
-          ),
-          const CartBadge(),
-          IconButton(
-            tooltip: t.actionSignOut,
-            icon: const Icon(Icons.logout),
-            onPressed: () =>
-                ref.read(authControllerProvider.notifier).signOut(),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(t.appName), actions: const [CartBadge()]),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(bannersProvider);
