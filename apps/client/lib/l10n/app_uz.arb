@@ -1,0 +1,56 @@
+{
+  "@@locale": "uz",
+
+  "appName": "ART-LAVKA",
+  "welcomeTagline": "O'zingiz yoqtirgan san'atni kiying.",
+
+  "actionRetry": "Qayta urinish",
+  "actionSignOut": "Chiqish",
+  "languageLabel": "Til",
+
+  "authLogIn": "Kirish",
+  "authRegister": "Ro'yxatdan o'tish",
+
+  "registerTitle": "Hisob yaratish",
+  "fieldFullName": "Ism va familiya",
+  "fieldPhone": "Telefon",
+  "fieldEmailOptional": "Email (ixtiyoriy)",
+  "authSendCode": "Kod yuborish",
+
+  "loginTitle": "Kirish",
+  "loginSubtitle": "Kod olish uchun telefon raqamini kiriting.",
+
+  "otpTitle": "Kodni kiriting",
+  "otpSentTo": "{phone} raqamiga 6 xonali kod yubordik.",
+  "otpVerify": "Tasdiqlash",
+  "otpResendIn": "{seconds} s dan keyin qayta yuborish",
+  "otpResend": "Kodni qayta yuborish",
+
+  "profileTitle": "Profilingizni to'ldiring",
+  "profileSubtitle": "Boshlash uchun bir nechta narsa.",
+  "profileSave": "Saqlash",
+
+  "homeWelcome": "Xush kelibsiz, {name}!",
+  "homeWelcomeGeneric": "Xush kelibsiz!",
+  "homeFoundationNote": "Tizimga kirdingiz. Keyingi bosqich — katalog.",
+
+  "valRequired": "Bu maydon to'ldirilishi shart.",
+  "valInvalidPhone": "To'g'ri telefon raqamini kiriting.",
+  "valOtpIncomplete": "6 xonali kodni kiriting.",
+
+  "successOtpSent": "Kod yuborildi. Xabarlaringizni tekshiring.",
+  "successLoggedIn": "Xush kelibsiz!",
+  "successRegistered": "Hisob yaratildi.",
+  "successProfileSaved": "Saqlandi.",
+
+  "errNetwork": "Aloqa yo'q. Internetni tekshirib, qayta urinib ko'ring.",
+  "errServer": "Nimadir xato ketdi. Iltimos, qayta urinib ko'ring.",
+  "errOtpWrong": "Kod noto'g'ri. Tekshirib, qayta urinib ko'ring.",
+  "errOtpExpired": "Kod muddati tugadi. Yangisini so'rang.",
+  "errOtpThrottled": "Urinishlar juda ko'p. Biroz kutib, qayta urinib ko'ring.",
+  "errInvalidPhone": "To'g'ri telefon raqamini kiriting.",
+  "errValidation": "Belgilangan maydonlarni tekshiring.",
+  "errSessionExpired": "Tizimdan chiqdingiz. Iltimos, qayta kiring.",
+  "errSellerNotVerified": "Sotuvchi hisobingiz hali ko'rib chiqilmoqda.",
+  "errUnauthorized": "Davom etish uchun tizimga kiring."
+}

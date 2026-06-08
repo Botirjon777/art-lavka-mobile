@@ -1,0 +1,50 @@
+# ART-LAVKA — melos / pub workspace root.
+# This package exists only to orchestrate the workspace; it ships no code.
+name: artlavka_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+# Dart pub workspace members. `dart pub get` here resolves them all together.
+workspace:
+  - apps/client
+  - apps/studio
+  - packages/artlavka_core
+
+dev_dependencies:
+  melos: ^7.0.0
+
+# Melos config (v7 reads this from pubspec.yaml).
+# Run scripts with: dart run melos run <name>
+melos:
+  scripts:
+    analyze:
+      description: Statically analyze every package in the workspace.
+      run: flutter analyze .
+      exec:
+        concurrency: 5
+
+    test:
+      description: Run tests in every package that has a test/ dir.
+      run: flutter test
+      exec:
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+
+    format:
+      description: Format all Dart code and fail if anything was unformatted.
+      run: dart format --set-exit-if-changed .
+
+    build_client:
+      description: Build the client (customer) Android release APK.
+      run: flutter build apk --release
+      packageFilters:
+        scope: artlavka_client
+
+    build_studio:
+      description: Build the studio (seller) Android release APK.
+      run: flutter build apk --release
+      packageFilters:
+        scope: artlavka_studio

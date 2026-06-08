@@ -1,0 +1,65 @@
+{
+  "@@locale": "en",
+
+  "appName": "ART-LAVKA",
+  "welcomeTagline": "Wear the art you love.",
+
+  "actionRetry": "Try again",
+  "actionSignOut": "Sign out",
+  "languageLabel": "Language",
+
+  "authLogIn": "Log in",
+  "authRegister": "Register",
+
+  "registerTitle": "Create account",
+  "fieldFullName": "Full name",
+  "fieldPhone": "Phone",
+  "fieldEmailOptional": "Email (optional)",
+  "authSendCode": "Send code",
+
+  "loginTitle": "Log in",
+  "loginSubtitle": "Enter your phone to get a code.",
+
+  "otpTitle": "Enter code",
+  "otpSentTo": "We sent a 6-digit code to {phone}.",
+  "@otpSentTo": {
+    "placeholders": { "phone": { "type": "String" } }
+  },
+  "otpVerify": "Verify",
+  "otpResendIn": "Resend in {seconds}s",
+  "@otpResendIn": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "otpResend": "Resend code",
+
+  "profileTitle": "Complete your profile",
+  "profileSubtitle": "Just a couple of things to get started.",
+  "profileSave": "Save",
+
+  "homeWelcome": "Welcome, {name}!",
+  "@homeWelcome": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "homeWelcomeGeneric": "Welcome back!",
+  "homeFoundationNote": "You're signed in. The catalog lands next.",
+
+  "valRequired": "This field is required.",
+  "valInvalidPhone": "Enter a valid phone number.",
+  "valOtpIncomplete": "Enter the 6-digit code.",
+
+  "successOtpSent": "Code sent. Check your messages.",
+  "successLoggedIn": "Welcome back!",
+  "successRegistered": "Account created.",
+  "successProfileSaved": "Saved.",
+
+  "errNetwork": "No connection. Check your internet and try again.",
+  "errServer": "Something went wrong. Please try again.",
+  "errOtpWrong": "That code isn't right. Check it and try again.",
+  "errOtpExpired": "This code has expired. Request a new one.",
+  "errOtpThrottled": "Too many attempts. Please wait a moment before trying again.",
+  "errInvalidPhone": "Enter a valid phone number.",
+  "errValidation": "Please check the highlighted fields.",
+  "errSessionExpired": "You've been signed out. Please log in again.",
+  "errSellerNotVerified": "Your seller account is still under review.",
+  "errUnauthorized": "Please log in to continue."
+}

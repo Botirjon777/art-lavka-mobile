@@ -1,0 +1,8 @@
+# Flutter gen-l10n config. Generates AppLocalizations from lib/l10n/*.arb into a
+# real path (not a synthetic package) so the analyzer sees it without a build.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-dir: lib/l10n/gen
+output-class: AppLocalizations
+nullable-getter: false

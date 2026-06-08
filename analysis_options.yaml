@@ -1,0 +1,24 @@
+# Shared lint rules for the whole ART-LAVKA workspace (SPEC §13).
+# Each package's analysis_options.yaml includes THIS file so rules are shared.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/l10n/gen/**"
+  errors:
+    # Treat a few smells as warnings so they surface in CI.
+    avoid_print: warning
+
+linter:
+  rules:
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_final_locals: true
+    avoid_print: true
+    use_super_parameters: true
+    sort_child_properties_last: true
+    unnecessary_late: true
+    avoid_redundant_argument_values: true

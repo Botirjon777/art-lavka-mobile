@@ -1,0 +1,56 @@
+{
+  "@@locale": "ru",
+
+  "appName": "ART-LAVKA",
+  "welcomeTagline": "Носите искусство, которое любите.",
+
+  "actionRetry": "Повторить",
+  "actionSignOut": "Выйти",
+  "languageLabel": "Язык",
+
+  "authLogIn": "Войти",
+  "authRegister": "Регистрация",
+
+  "registerTitle": "Создать аккаунт",
+  "fieldFullName": "Имя и фамилия",
+  "fieldPhone": "Телефон",
+  "fieldEmailOptional": "Email (необязательно)",
+  "authSendCode": "Отправить код",
+
+  "loginTitle": "Вход",
+  "loginSubtitle": "Введите номер телефона, чтобы получить код.",
+
+  "otpTitle": "Введите код",
+  "otpSentTo": "Мы отправили 6-значный код на {phone}.",
+  "otpVerify": "Подтвердить",
+  "otpResendIn": "Повторить через {seconds} с",
+  "otpResend": "Отправить код снова",
+
+  "profileTitle": "Заполните профиль",
+  "profileSubtitle": "Пара деталей, чтобы начать.",
+  "profileSave": "Сохранить",
+
+  "homeWelcome": "Здравствуйте, {name}!",
+  "homeWelcomeGeneric": "С возвращением!",
+  "homeFoundationNote": "Вы вошли. Каталог появится следующим.",
+
+  "valRequired": "Это поле обязательно.",
+  "valInvalidPhone": "Введите корректный номер телефона.",
+  "valOtpIncomplete": "Введите 6-значный код.",
+
+  "successOtpSent": "Код отправлен. Проверьте сообщения.",
+  "successLoggedIn": "С возвращением!",
+  "successRegistered": "Аккаунт создан.",
+  "successProfileSaved": "Сохранено.",
+
+  "errNetwork": "Нет соединения. Проверьте интернет и попробуйте снова.",
+  "errServer": "Что-то пошло не так. Попробуйте ещё раз.",
+  "errOtpWrong": "Неверный код. Проверьте и попробуйте снова.",
+  "errOtpExpired": "Срок действия кода истёк. Запросите новый.",
+  "errOtpThrottled": "Слишком много попыток. Подождите немного и попробуйте снова.",
+  "errInvalidPhone": "Введите корректный номер телефона.",
+  "errValidation": "Проверьте выделенные поля.",
+  "errSessionExpired": "Вы вышли из аккаунта. Войдите снова.",
+  "errSellerNotVerified": "Ваш аккаунт продавца на проверке.",
+  "errUnauthorized": "Войдите, чтобы продолжить."
+}

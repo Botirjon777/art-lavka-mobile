@@ -1,0 +1,416 @@
+// ART-LAVKA data model (docs/BACKEND_NODE.md §3).
+// Carries over the Supabase design unchanged in spirit:
+//  - All money is BigInt UZS (no decimals). Serialized to JSON as a string.
+//  - `ledger` is append-only; a balance is SUM(amount), never a stored field.
+//  - order_items snapshot prices at purchase time.
+// Column names are snake_case via @map/@@map so a future DB matches the SQL plan.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================================================
+// Enums
+// ===========================================================================
+enum UserRole {
+  customer
+  designer
+  operations
+  moderator
+  admin
+}
+
+enum KycStatus {
+  none
+  pending
+  verified
+  rejected
+}
+
+enum PayoutMethod {
+  card
+  bank
+}
+
+enum DesignStatus {
+  draft
+  pending
+  approved
+  rejected
+}
+
+enum OrderStatus {
+  pending
+  paid
+  inProduction
+  shipped
+  delivered
+  cancelled
+  refunded
+}
+
+enum PaymentProvider {
+  click
+  payme
+  uzum
+}
+
+enum LedgerEntryType {
+  royaltyAccrued
+  payoutDebit
+  adjustment
+  refundReversal
+}
+
+enum PayoutStatus {
+  requested
+  processing
+  paid
+  failed
+}
+
+enum BannerLinkType {
+  category
+  listing
+  url
+  none
+}
+
+// ===========================================================================
+// Users & auth
+// ===========================================================================
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  phone        String   @unique
+  email        String?
+  fullName     String?  @map("full_name")
+  avatarUrl    String?  @map("avatar_url")
+  languageCode String   @default("ru") @map("language_code")
+  role         UserRole @default(customer)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  designerProfile DesignerProfile?
+  designs         Design[]
+  orders          Order[]
+  ledger          LedgerEntry[]
+  payouts         Payout[]
+  reviews         Review[]
+  cartItems       CartItem[]
+  deviceTokens    DeviceToken[]
+  addresses       Address[]
+  refreshTokens   RefreshToken[]
+
+  @@map("users")
+}
+
+/// Short-lived hashed OTP codes (auth module verifies + expires these).
+model OtpCode {
+  id        String   @id @default(uuid()) @db.Uuid
+  phone     String
+  codeHash  String   @map("code_hash")
+  attempts  Int      @default(0)
+  expiresAt DateTime @map("expires_at")
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([phone])
+  @@map("otp_codes")
+}
+
+/// Hashed refresh tokens for JWT rotation/logout.
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @unique @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Address {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  label      String?
+  line       String
+  city       String?
+  notes      String?
+  isDefault  Boolean  @default(false) @map("is_default")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+// ===========================================================================
+// Designers (KYC + contract)
+// ===========================================================================
+model DesignerProfile {
+  userId             String    @id @map("user_id") @db.Uuid
+  displayName        String    @map("display_name")
+  slug               String    @unique
+  bio                String?
+  avatarUrl          String?   @map("avatar_url")
+  kycStatus          KycStatus @default(none) @map("kyc_status")
+  payoutMethod       PayoutMethod? @map("payout_method")
+  legalName          String?   @map("legal_name")
+  idNumber           String?   @map("id_number")
+  idPhotoPath        String?   @map("id_photo_path")
+  taxNote            String?   @map("tax_note")
+  contractVersion    String?   @map("contract_version")
+  contractAcceptedAt DateTime? @map("contract_accepted_at")
+  regulationsHash    String?   @map("regulations_hash")
+  signaturePath      String?   @map("signature_path")
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("designer_profiles")
+}
+
+// ===========================================================================
+// Catalog
+// ===========================================================================
+model Category {
+  id        String @id @default(uuid()) @db.Uuid
+  slug      String @unique
+  nameRu    String @map("name_ru")
+  nameUz    String @map("name_uz")
+  nameEn    String @map("name_en")
+  sortOrder Int    @default(0) @map("sort_order")
+
+  designs DesignCategory[]
+
+  @@map("categories")
+}
+
+model ProductType {
+  id       String @id @default(uuid()) @db.Uuid
+  slug     String @unique
+  nameRu   String @map("name_ru")
+  nameUz   String @map("name_uz")
+  nameEn   String @map("name_en")
+  baseCost BigInt @map("base_cost") // UZS
+  sizes    Json   @default("[]")
+  variants Json   @default("[]") // [{color, template_url, print_zone, warp}]
+
+  listings   Listing[]
+  orderItems OrderItem[]
+
+  @@map("product_types")
+}
+
+model Design {
+  id              String       @id @default(uuid()) @db.Uuid
+  designerId      String       @map("designer_id") @db.Uuid
+  title           String
+  description     String?
+  previewUrl      String       @map("preview_url")
+  printFilePath   String       @map("print_file_path") // PRIVATE
+  widthPx         Int          @default(0) @map("width_px")
+  heightPx        Int          @default(0) @map("height_px")
+  status          DesignStatus @default(pending)
+  rejectionReason String?      @map("rejection_reason")
+  createdAt       DateTime     @default(now()) @map("created_at")
+
+  designer   User             @relation(fields: [designerId], references: [id], onDelete: Cascade)
+  categories DesignCategory[]
+  listings   Listing[]
+  orderItems OrderItem[]
+
+  @@index([designerId])
+  @@index([status])
+  @@map("designs")
+}
+
+model DesignCategory {
+  designId   String @map("design_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  design   Design   @relation(fields: [designId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([designId, categoryId])
+  @@index([categoryId])
+  @@map("design_categories")
+}
+
+model Listing {
+  id            String   @id @default(uuid()) @db.Uuid
+  designId      String   @map("design_id") @db.Uuid
+  productTypeId String   @map("product_type_id") @db.Uuid
+  royalty       BigInt // UZS
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  design      Design      @relation(fields: [designId], references: [id], onDelete: Cascade)
+  productType ProductType @relation(fields: [productTypeId], references: [id])
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+
+  @@unique([designId, productTypeId])
+  @@index([designId])
+  @@index([productTypeId])
+  @@map("listings")
+}
+
+// ===========================================================================
+// Orders (prices snapshotted)
+// ===========================================================================
+model Order {
+  id              String           @id @default(uuid()) @db.Uuid
+  customerId      String           @map("customer_id") @db.Uuid
+  status          OrderStatus      @default(pending)
+  subtotal        BigInt           @default(0)
+  shipping        BigInt           @default(0)
+  total           BigInt           @default(0)
+  paymentProvider PaymentProvider? @map("payment_provider")
+  providerRef     String?          @map("provider_ref")
+  addressId       String?          @map("address_id") @db.Uuid
+  shippingAddress String?          @map("shipping_address")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  paidAt          DateTime?        @map("paid_at")
+  deliveredAt     DateTime?        @map("delivered_at")
+
+  customer User        @relation(fields: [customerId], references: [id])
+  address  Address?    @relation(fields: [addressId], references: [id])
+  items    OrderItem[]
+
+  @@index([customerId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id                String  @id @default(uuid()) @db.Uuid
+  orderId           String  @map("order_id") @db.Uuid
+  listingId         String  @map("listing_id") @db.Uuid
+  designId          String  @map("design_id") @db.Uuid
+  designerId        String  @map("designer_id") @db.Uuid // snapshot
+  productTypeId     String  @map("product_type_id") @db.Uuid
+  quantity          Int
+  unitBaseCost      BigInt  @map("unit_base_cost") // snapshot
+  unitRoyalty       BigInt  @map("unit_royalty") // snapshot
+  titleSnapshot     String? @map("title_snapshot")
+  mockupUrlSnapshot String? @map("mockup_url_snapshot")
+  size              String?
+  color             String?
+  reviewed          Boolean @default(false)
+
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  listing     Listing     @relation(fields: [listingId], references: [id])
+  design      Design      @relation(fields: [designId], references: [id])
+  productType ProductType @relation(fields: [productTypeId], references: [id])
+  ledger      LedgerEntry[]
+  review      Review?
+
+  @@index([designId])
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// ===========================================================================
+// Money: ledger (append-only) + payouts
+// ===========================================================================
+model LedgerEntry {
+  id          String          @id @default(uuid()) @db.Uuid
+  designerId  String          @map("designer_id") @db.Uuid
+  type        LedgerEntryType
+  amount      BigInt // signed: credit > 0, debit < 0
+  orderItemId String?         @map("order_item_id") @db.Uuid
+  payoutId    String?         @map("payout_id") @db.Uuid
+  memo        String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  designer  User       @relation(fields: [designerId], references: [id])
+  orderItem OrderItem? @relation(fields: [orderItemId], references: [id])
+  payout    Payout?    @relation(fields: [payoutId], references: [id])
+
+  @@index([designerId])
+  @@index([createdAt])
+  @@map("ledger")
+}
+
+model Payout {
+  id            String       @id @default(uuid()) @db.Uuid
+  designerId    String       @map("designer_id") @db.Uuid
+  amount        BigInt
+  status        PayoutStatus @default(requested)
+  method        PayoutMethod @default(card)
+  requestedAt   DateTime     @default(now()) @map("requested_at")
+  processedAt   DateTime?    @map("processed_at")
+  failureReason String?      @map("failure_reason")
+
+  designer User          @relation(fields: [designerId], references: [id])
+  ledger   LedgerEntry[]
+
+  @@index([designerId])
+  @@map("payouts")
+}
+
+// ===========================================================================
+// Reviews, banners, cart, device tokens
+// ===========================================================================
+model Review {
+  id          String   @id @default(uuid()) @db.Uuid
+  orderItemId String   @unique @map("order_item_id") @db.Uuid
+  customerId  String   @map("customer_id") @db.Uuid
+  rating      Int // 1..5
+  comment     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  orderItem OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  customer  User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Banner {
+  id         String         @id @default(uuid()) @db.Uuid
+  imageUrl   String         @map("image_url")
+  linkType   BannerLinkType @default(none) @map("link_type")
+  linkTarget String?        @map("link_target")
+  sortOrder  Int            @default(0) @map("sort_order")
+  active     Boolean        @default(true)
+
+  @@map("banners")
+}
+
+model CartItem {
+  id         String   @id @default(uuid()) @db.Uuid
+  customerId String   @map("customer_id") @db.Uuid
+  listingId  String   @map("listing_id") @db.Uuid
+  quantity   Int      @default(1)
+  size       String?
+  color      String?
+  addedAt    DateTime @default(now()) @map("added_at")
+
+  customer User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  listing  Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, listingId, size, color])
+  @@index([customerId])
+  @@map("cart_items")
+}
+
+model DeviceToken {
+  token     String   @id
+  userId    String   @map("user_id") @db.Uuid
+  platform  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("device_tokens")
+}

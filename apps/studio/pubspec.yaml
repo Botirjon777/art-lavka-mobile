@@ -1,0 +1,32 @@
+name: artlavka_studio
+description: "ART-LAVKA Studio — seller app: onboard, upload prints, stats, withdraw."
+publish_to: 'none'
+version: 1.0.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Shared models / services / theme / utils.
+  artlavka_core:
+    path: ../../packages/artlavka_core
+
+  # State management (controllers + immutable state per feature).
+  flutter_riverpod: ^2.6.1
+  # Routing with the KYC verification redirect gate.
+  go_router: ^14.6.0
+  # Cached preview/mockup images in uploads/stats.
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

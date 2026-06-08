@@ -1,0 +1,61 @@
+# Supabase local stack config. `supabase start` reads this.
+# project_id is a local label only.
+project_id = "artlavka"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[storage]
+enabled = true
+# Match the largest print-ready upload we accept.
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+# Phone OTP is the primary identity (SPEC §8).
+enable_signup = true
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+# Wire a real provider (e.g. Twilio) via env before going live. For local dev,
+# `supabase start` prints the OTP to the console with the test provider.
+[auth.sms.test_otp]
+# Example fixed codes for local testing (phone = code).
+# "+998901234567" = "123456"
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+
+[edge_runtime]
+enabled = true
+
+# Scheduled royalty accrual (SPEC §5). Runs daily; the function is idempotent.
+[functions.accrue-royalty]
+verify_jwt = false
+
+[functions.payment-webhook]
+verify_jwt = false
+
+[functions.create-order]
+verify_jwt = true
+
+[functions.request-payout]
+verify_jwt = true
+
+[functions.generate-signed-url]
+verify_jwt = true
