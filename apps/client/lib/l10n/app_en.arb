@@ -118,5 +118,14 @@
   "reviewTitle": "Rate this item",
   "reviewCommentHint": "Add a comment (optional)",
   "reviewSubmit": "Submit",
-  "reviewThanks": "Thanks for your review."
+  "reviewThanks": "Thanks for your review.",
+
+  "navHome": "Home",
+  "navCatalog": "Catalog",
+  "navProfile": "Profile",
+  "profileTitle": "Profile",
+  "profileLanguage": "Language",
+  "profileBecomeSeller": "Become a seller",
+  "profileBecomeSellerHint": "Use the ART-LAVKA Studio app to upload designs and sell.",
+  "homeEmpty": "Nothing here yet — browse the catalog."
 }

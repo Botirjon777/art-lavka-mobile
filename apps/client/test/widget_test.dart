@@ -4,6 +4,7 @@ import 'package:artlavka_client/features/auth/otp_page.dart';
 import 'package:artlavka_client/features/auth/profile_completion_page.dart';
 import 'package:artlavka_client/features/auth/welcome_page.dart';
 import 'package:artlavka_client/features/home/home_page.dart';
+import 'package:artlavka_client/features/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -45,6 +46,12 @@ void main() {
     await tester.pump();
     await tester.pumpAndSettle();
     expect(find.byType(HomePage), findsOneWidget);
+
+    // Bottom navigation is present; switching to the Profile tab works.
+    expect(find.byType(NavigationBar), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.person_outline));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfilePage), findsOneWidget);
   });
 
   testWidgets('wrong OTP shows an error and stays on the OTP screen', (
