@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed for the REST API (auth, onboarding). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="artlavka_studio"
+        android:label="ART-LAVKA Studio"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
