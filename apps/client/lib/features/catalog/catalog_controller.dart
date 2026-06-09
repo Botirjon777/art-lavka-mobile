@@ -13,6 +13,12 @@ final categoriesProvider = FutureProvider<List<Category>>(
       (await ref.watch(catalogRepositoryProvider).categories()).unwrap(),
 );
 
+/// Product types (cached) — used to label a listing's product on the swiper.
+final productTypesProvider = FutureProvider<List<ProductType>>(
+  (ref) async =>
+      (await ref.watch(catalogRepositoryProvider).productTypes()).unwrap(),
+);
+
 /// Selected category slug (null = all).
 final selectedCategoryProvider = StateProvider.autoDispose<String?>(
   (_) => null,

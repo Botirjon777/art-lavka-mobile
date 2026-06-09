@@ -16,6 +16,7 @@ import 'features/orders/order_detail_page.dart';
 import 'features/orders/orders_list_page.dart';
 import 'features/product/product_page.dart';
 import 'features/profile/profile_page.dart';
+import 'features/splash/splash_page.dart';
 import 'ui/scaffold_with_nav.dart';
 
 const _authRoutes = {'/welcome', '/login', '/register', '/otp'};
@@ -26,22 +27,27 @@ final routerProvider = Provider<GoRouter>((ref) {
   final session = ref.read(appSessionProvider);
 
   return GoRouter(
-    initialLocation: '/welcome',
+    initialLocation: '/splash',
     refreshListenable: session,
     redirect: (context, state) {
       final loc = state.matchedLocation;
-      final onAuth = _authRoutes.contains(loc);
 
+      // Hold on the splash until its animation completes.
+      if (!session.splashDone) return loc == '/splash' ? null : '/splash';
+
+      final onAuth = _authRoutes.contains(loc);
       if (!session.isSignedIn) {
         return onAuth ? null : '/welcome';
       }
       if (!session.hasProfile) {
         return loc == _completeRoute ? null : _completeRoute;
       }
-      if (onAuth || loc == _completeRoute) return '/home';
+      // Signed in with a profile: leave splash/auth/complete for home.
+      if (loc == '/splash' || onAuth || loc == _completeRoute) return '/home';
       return null;
     },
     routes: [
+      GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
       GoRoute(path: '/welcome', builder: (_, _) => const WelcomePage()),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
