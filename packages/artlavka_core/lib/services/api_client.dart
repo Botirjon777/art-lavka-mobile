@@ -32,8 +32,9 @@ class ApiClient {
           Dio(
             BaseOptions(
               baseUrl: baseUrl ?? Env.apiBaseUrl,
-              connectTimeout: const Duration(seconds: 15),
-              receiveTimeout: const Duration(seconds: 20),
+              // Generous timeouts: free hosting can cold-start ~30–60s.
+              connectTimeout: const Duration(seconds: 30),
+              receiveTimeout: const Duration(seconds: 60),
               contentType: 'application/json',
             ),
           ) {
@@ -105,10 +106,15 @@ class ApiClient {
     ErrorInterceptorHandler handler,
   ) async {
     final status = err.response?.statusCode;
-    final isAuthRoute = err.requestOptions.path.contains('/auth/');
+    final path = err.requestOptions.path;
+    // Don't try to refresh on the token-issuing endpoints themselves (avoids
+    // loops). Everything else — including /auth/me, /auth/logout, PATCH /auth/me
+    // — SHOULD refresh on a 401 so a session survives access-token expiry.
+    final noRefresh =
+        path.contains('/auth/otp') || path.endsWith('/auth/refresh');
     final alreadyRetried = err.requestOptions.extra['retried'] == true;
 
-    if (status == 401 && !isAuthRoute && !alreadyRetried) {
+    if (status == 401 && !noRefresh && !alreadyRetried) {
       final refreshed = await _tryRefresh();
       if (refreshed) {
         final opts = err.requestOptions;
@@ -134,7 +140,11 @@ class ApiClient {
     if (refresh == null) return false;
     try {
       final res = await Dio(
-        BaseOptions(baseUrl: _dio.options.baseUrl),
+        BaseOptions(
+          baseUrl: _dio.options.baseUrl,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 60),
+        ),
       ).post('/auth/refresh', data: {'refreshToken': refresh});
       final data = res.data;
       if (data is Map &&
