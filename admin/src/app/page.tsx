@@ -9,6 +9,7 @@ interface Stats {
   customers: number;
   designers: number;
   pendingApplications: number;
+  pendingDesigns: number;
   orders: number;
   paidOrders: number;
   revenueUzs: string;
@@ -38,8 +39,9 @@ function Dashboard() {
       {data && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           <Card label="Customers" value={data.customers} />
-          <Card label="Designers" value={data.designers} />
+          <Card label="Shops" value={data.designers} />
           <Card label="Applications" value={data.pendingApplications} accent />
+          <Card label="Prints to review" value={data.pendingDesigns} accent />
           <Card label="Orders" value={data.orders} />
           <Card label="Paid orders" value={data.paidOrders} />
           <Card label="Revenue" value={formatUzs(data.revenueUzs)} />
