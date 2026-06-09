@@ -6,9 +6,19 @@ import 'package:flutter/foundation.dart';
 class AppSession extends ChangeNotifier {
   AppUser? _user;
   DesignerProfile? _profile;
+  bool _splashDone = false;
 
   AppUser? get user => _user;
   DesignerProfile? get profile => _profile;
+
+  /// True once the intro splash animation has finished (router gate).
+  bool get splashDone => _splashDone;
+
+  void completeSplash() {
+    if (_splashDone) return;
+    _splashDone = true;
+    notifyListeners();
+  }
 
   bool get isSignedIn => _user != null;
 

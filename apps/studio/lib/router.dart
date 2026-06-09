@@ -7,6 +7,7 @@ import 'features/auth/otp_page.dart';
 import 'features/home/dashboard_page.dart';
 import 'features/onboarding/onboarding_page.dart';
 import 'features/onboarding/pending_page.dart';
+import 'features/splash/splash_page.dart';
 
 const _authRoutes = {'/login', '/otp'};
 
@@ -19,10 +20,16 @@ final routerProvider = Provider<GoRouter>((ref) {
   final session = ref.read(appSessionProvider);
 
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/splash',
     refreshListenable: session,
     redirect: (context, state) {
       final loc = state.matchedLocation;
+
+      // Hold on the splash until its animation completes.
+      if (!session.splashDone) return loc == '/splash' ? null : '/splash';
+      if (loc == '/splash') {
+        return session.isSignedIn ? '/onboarding' : '/login';
+      }
 
       if (!session.isSignedIn) {
         return _authRoutes.contains(loc) ? null : '/login';
@@ -42,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/otp', builder: (_, _) => const OtpPage()),
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingPage()),
