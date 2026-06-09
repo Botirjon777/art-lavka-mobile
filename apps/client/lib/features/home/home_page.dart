@@ -10,8 +10,9 @@ import 'home_controller.dart';
 import 'widgets/banner_carousel.dart';
 import 'widgets/feed_section.dart';
 
-/// Home: banners + "New arrivals" + a shelf per category (SPEC §4). Each section
-/// loads independently and hides itself when empty/erroring (never a blank wall).
+/// Home (SPEC §4): banner swiper (news/promotions) → Best sellers →
+/// Recommended → New arrivals → per-category shelves. Each shelf loads
+/// independently, caches (no refetch on scroll), and hides itself when empty.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -33,7 +34,9 @@ class HomePage extends ConsumerWidget {
           children: [
             const SizedBox(height: AppTheme.space * 2),
             const BannerCarousel(),
-            FeedSection(title: t.homeNewArrivals),
+            FeedSection(title: t.homeBestSellers, sort: 'popular'),
+            FeedSection(title: t.homeRecommended, sort: 'new'),
+            FeedSection(title: t.homeNewArrivals, sort: 'new'),
             ...categories
                 .maybeWhen(data: (c) => c, orElse: () => const <Category>[])
                 .map(

@@ -43,6 +43,7 @@ class _FakeCatalog extends CatalogRepository {
   Future<Result<List<Listing>>> listings({
     String? categorySlug,
     String? query,
+    String? sort,
     int page = 0,
     int pageSize = AppConstants.pageSize,
   }) async => Success(page == 0 ? listings_ : const []);

@@ -39,6 +39,7 @@ class _FakeCatalog extends CatalogRepository {
   Future<Result<List<Listing>>> listings({
     String? categorySlug,
     String? query,
+    String? sort,
     int page = 0,
     int pageSize = AppConstants.pageSize,
   }) async => Success([_listing()]);
@@ -62,7 +63,7 @@ void main() {
       ]),
     );
     await tester.pumpAndSettle();
-    expect(find.text('New arrivals'), findsOneWidget);
+    expect(find.text('Best sellers'), findsOneWidget);
     expect(find.byType(ProductCard), findsWidgets);
   });
 }

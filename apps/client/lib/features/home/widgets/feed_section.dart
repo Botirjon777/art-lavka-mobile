@@ -10,16 +10,24 @@ import '../home_controller.dart';
 /// A horizontal "shelf" of product cards for one feed (a category, or newest).
 /// Renders nothing when the section is empty so the home stays tidy.
 class FeedSection extends ConsumerWidget {
-  const FeedSection({super.key, required this.title, this.categorySlug});
+  const FeedSection({
+    super.key,
+    required this.title,
+    this.categorySlug,
+    this.sort,
+  });
 
   final String title;
   final String? categorySlug;
+  final String? sort;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.l10n;
     final text = Theme.of(context).textTheme;
-    final feed = ref.watch(feedListingsProvider(categorySlug));
+    final feed = ref.watch(
+      feedListingsProvider((category: categorySlug, sort: sort)),
+    );
 
     return feed.when(
       loading: () =>

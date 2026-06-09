@@ -6,8 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../bootstrap/core_providers.dart';
 import '../../bootstrap/result_x.dart';
 
-/// Categories for the filter row.
-final categoriesProvider = FutureProvider.autoDispose<List<Category>>(
+/// Categories for the filter row. Cached (not autoDispose) so it's fetched once
+/// and shared by the home shelves + the catalog filter.
+final categoriesProvider = FutureProvider<List<Category>>(
   (ref) async =>
       (await ref.watch(catalogRepositoryProvider).categories()).unwrap(),
 );
