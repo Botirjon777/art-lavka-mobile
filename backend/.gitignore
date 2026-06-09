@@ -13,3 +13,6 @@ coverage/
 # Logs / OS
 *.log
 .DS_Store
+
+# Migration dumps (contain source PII — never commit)
+scripts/dump/
