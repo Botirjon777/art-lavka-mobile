@@ -53,6 +53,9 @@ class _FakeCatalog extends CatalogRepository {
 
   @override
   Future<Result<Listing>> listing(String id) async => Success(_sampleListing());
+
+  @override
+  Future<Result<List<ProductType>>> productTypes() async => const Success([]);
 }
 
 class _FakeOrders extends OrderRepository {

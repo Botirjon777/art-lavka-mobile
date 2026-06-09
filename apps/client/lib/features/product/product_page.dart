@@ -1,5 +1,4 @@
 import 'package:artlavka_core/artlavka_core.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +8,7 @@ import '../../ui/async_views.dart';
 import '../../ui/cart_badge.dart';
 import '../cart/cart_controller.dart';
 import 'product_controller.dart';
+import 'widgets/product_image_swiper.dart';
 
 /// Product page: mockup, price, designer, rating, reviews, add-to-cart (SPEC §4).
 class ProductPage extends ConsumerWidget {
@@ -50,22 +50,7 @@ class _Detail extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(AppTheme.space * 2),
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(AppTheme.radius),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: (listing.mockupUrl == null || listing.mockupUrl!.isEmpty)
-                ? Container(color: AppColors.surfaceMuted)
-                : CachedNetworkImage(
-                    imageUrl: listing.mockupUrl!,
-                    fit: BoxFit.cover,
-                    placeholder: (_, _) =>
-                        Container(color: AppColors.surfaceMuted),
-                    errorWidget: (_, _, _) =>
-                        Container(color: AppColors.surfaceMuted),
-                  ),
-          ),
-        ),
+        ProductImageSwiper(listing: listing),
         const SizedBox(height: AppTheme.space * 2),
         Text(listing.title ?? '', style: text.headlineMedium),
         if (listing.designerName != null)
