@@ -61,6 +61,7 @@
   "fieldProduct": "Товар",
   "fieldRoyalty": "Роялти (сум)",
   "uploadSubmit": "Отправить на проверку",
+  "uploadPickImage": "Выбрать изображение",
   "designStatusDraft": "Черновик",
   "designStatusPending": "На проверке",
   "designStatusApproved": "Опубликован",

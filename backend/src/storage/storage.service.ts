@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppException } from '../common/errors/app.exception';
@@ -14,6 +14,19 @@ export interface PresignedUpload {
   publicUrl: string | null;
 }
 
+/** Params the client posts (with the file) directly to Cloudinary. */
+export interface CloudinaryUploadParams {
+  uploadUrl: string;
+  cloudName: string;
+  apiKey: string;
+  timestamp: number;
+  folder: string;
+  signature: string;
+}
+
+/** Folders the app may sign uploads into (mirrors the legacy layout). */
+export const CLOUDINARY_FOLDERS = ['art-lavka/prints', 'art-lavka/gallery'];
+
 /**
  * Issues presigned URLs for S3-compatible storage (BACKEND_NODE.md §5).
  *
@@ -26,6 +39,12 @@ export interface PresignedUpload {
 export class StorageService {
   private readonly mock: boolean;
   private readonly base: string;
+  private readonly cloudinary: {
+    enabled: boolean;
+    cloudName?: string;
+    apiKey?: string;
+    apiSecret?: string;
+  };
 
   constructor(
     private readonly prisma: PrismaService,
@@ -34,6 +53,52 @@ export class StorageService {
     const endpoint = config.get<string>('S3_ENDPOINT');
     this.mock = !endpoint;
     this.base = endpoint ?? 'https://storage.mock';
+
+    const cloudName = config.get<string>('CLOUDINARY_CLOUD_NAME');
+    const apiKey = config.get<string>('CLOUDINARY_API_KEY');
+    const apiSecret = config.get<string>('CLOUDINARY_API_SECRET');
+    this.cloudinary = {
+      enabled:
+        config.get<string>('USE_CLOUDINARY') === 'true' &&
+        !!cloudName &&
+        !!apiKey &&
+        !!apiSecret,
+      cloudName,
+      apiKey,
+      apiSecret,
+    };
+  }
+
+  /**
+   * Sign a direct Cloudinary upload. The client posts the file + these params
+   * to `uploadUrl`; Cloudinary returns a `secure_url` we store as the design's
+   * preview/print path. Secret never leaves the server.
+   */
+  cloudinarySign(folder: string): CloudinaryUploadParams {
+    const { enabled, cloudName, apiKey, apiSecret } = this.cloudinary;
+    if (!enabled || !cloudName || !apiKey || !apiSecret) {
+      throw new AppException(
+        ErrorCode.server,
+        'Cloudinary is not configured',
+        500,
+      );
+    }
+    if (!CLOUDINARY_FOLDERS.includes(folder)) {
+      throw AppException.validation('Unknown upload folder');
+    }
+    const timestamp = Math.floor(Date.now() / 1000);
+    // Cloudinary signs the sorted, &-joined params (minus file/api_key) + secret.
+    const signature = createHash('sha1')
+      .update(`folder=${folder}&timestamp=${timestamp}${apiSecret}`)
+      .digest('hex');
+    return {
+      uploadUrl: `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      cloudName,
+      apiKey,
+      timestamp,
+      folder,
+      signature,
+    };
   }
 
   presignUpload(bucket: string, contentType: string): PresignedUpload {

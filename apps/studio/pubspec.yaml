@@ -25,6 +25,8 @@ dependencies:
   go_router: ^14.6.0
   # Cached preview/mockup images in uploads/stats.
   cached_network_image: ^3.4.1
+  # Pick a print image from the device for upload.
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

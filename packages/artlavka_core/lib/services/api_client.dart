@@ -81,6 +81,26 @@ class ApiClient {
     }
   }
 
+  /// POST a multipart form to an ABSOLUTE url (e.g. a Cloudinary upload).
+  /// Bypasses the base URL and auth header; returns the parsed JSON body.
+  Future<dynamic> postMultipartAbsolute(
+    String absoluteUrl,
+    FormData form,
+  ) async {
+    try {
+      final res = await Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 30),
+          sendTimeout: const Duration(seconds: 120),
+          receiveTimeout: const Duration(seconds: 60),
+        ),
+      ).post(absoluteUrl, data: form);
+      return res.data;
+    } on DioException catch (e) {
+      throw _toApiException(e);
+    }
+  }
+
   Future<dynamic> _send(Future<Response<dynamic>> Function() request) async {
     try {
       final res = await request();
