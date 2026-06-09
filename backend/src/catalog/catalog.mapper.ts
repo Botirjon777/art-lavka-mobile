@@ -41,6 +41,9 @@ export function resolveOrderBy(
       return { royalty: 'asc' };
     case 'price_high':
       return { royalty: 'desc' };
+    // Best sellers: most ordered listings first (real sales count).
+    case 'popular':
+      return { orderItems: { _count: 'desc' } };
     case 'new':
     default:
       return { createdAt: 'desc' };

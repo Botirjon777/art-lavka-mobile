@@ -11,7 +11,7 @@ export class ListingsQueryDto {
   q?: string;
 
   @IsOptional()
-  @IsIn(['new', 'price_low', 'price_high'])
+  @IsIn(['new', 'price_low', 'price_high', 'popular'])
   sort?: string;
 
   @IsOptional()

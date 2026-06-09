@@ -32,6 +32,7 @@ class CatalogRepository {
   Future<Result<List<Listing>>> listings({
     String? categorySlug,
     String? query,
+    String? sort,
     int page = 0,
     int pageSize = AppConstants.pageSize,
   }) => ErrorMapper.guard(() async {
@@ -43,6 +44,7 @@ class CatalogRepository {
                 if (categorySlug != null && categorySlug.isNotEmpty)
                   'category': categorySlug,
                 if (query != null && query.trim().isNotEmpty) 'q': query.trim(),
+                'sort': ?sort,
               },
             )
             as Map;

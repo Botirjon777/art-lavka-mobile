@@ -109,5 +109,16 @@
   "profileLanguage": "Язык",
   "profileBecomeSeller": "Стать продавцом",
   "profileBecomeSellerHint": "Используйте приложение ART-LAVKA Studio, чтобы загружать дизайны и продавать.",
-  "homeEmpty": "Здесь пока пусто — загляните в каталог."
+  "homeEmpty": "Здесь пока пусто — загляните в каталог.",
+
+  "homeBestSellers": "Хиты продаж",
+  "homeRecommended": "Рекомендуем вам",
+  "profileEditName": "Изменить имя",
+  "profileSave": "Сохранить",
+  "profileCancel": "Отмена",
+  "profileMyOrders": "Мои заказы",
+  "profileAddresses": "Адреса",
+  "profileAbout": "О приложении",
+  "profileComingSoon": "Скоро",
+  "profileAboutBody": "ART-LAVKA — маркетплейс печати по требованию для Узбекистана."
 }
