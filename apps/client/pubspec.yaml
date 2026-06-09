@@ -31,8 +31,24 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # Generates the launcher icons from the logo.
+  flutter_launcher_icons: ^0.14.1
 
 flutter:
   uses-material-design: true
   # Generate localizations from lib/l10n/*.arb (see l10n.yaml).
   generate: true
+  assets:
+    - assets/logo/
+    - assets/banners/
+    - assets/products/
+    - assets/prints/
+
+# Launcher icon config — run: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/artlavka_logo.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#F7F4EF"
+  adaptive_icon_foreground: "assets/logo/artlavka_logo.png"
