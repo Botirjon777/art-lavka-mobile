@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+
 import '../utils/error_mapper.dart';
 import '../utils/json.dart';
 import '../utils/result.dart';
@@ -81,4 +83,30 @@ class StorageService {
         final data = await _api.get('/storage/print-file/$designId') as Map;
         return data['url'] as String;
       });
+
+  /// Upload a print image file directly to Cloudinary (signed by the API) and
+  /// return its `secure_url`. The same URL serves as preview + print path.
+  ///
+  /// Requires `USE_CLOUDINARY=true` server-side; otherwise the API returns a
+  /// server error and this surfaces as a [Result] failure.
+  Future<Result<String>> uploadPrintImage({
+    required String filePath,
+    String folder = 'art-lavka/prints',
+  }) => ErrorMapper.guard(() async {
+    final signed =
+        await _api.post('/storage/cloudinary-sign', data: {'folder': folder})
+            as Map;
+    final t = signed.cast<String, dynamic>();
+    final form = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath),
+      'api_key': t['api_key'].toString(),
+      'timestamp': t['timestamp'].toString(),
+      'folder': t['folder'].toString(),
+      'signature': t['signature'].toString(),
+    });
+    final res =
+        await _api.postMultipartAbsolute(t['upload_url'] as String, form)
+            as Map;
+    return res['secure_url'] as String;
+  });
 }

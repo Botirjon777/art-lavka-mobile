@@ -29,3 +29,12 @@ services:
         sync: false
       - key: TELEGRAM_CHAT_ID
         sync: false
+      # Cloudinary signed uploads (designer print artwork) — set in the dashboard.
+      - key: USE_CLOUDINARY
+        value: "true"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
