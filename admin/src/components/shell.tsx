@@ -7,7 +7,9 @@ import { useAuth } from '@/store/auth';
 
 const NAV = [
   { href: '/', label: 'Dashboard' },
-  { href: '/designers', label: 'Designers' },
+  { href: '/shops', label: 'Shops' },
+  { href: '/prints', label: 'Prints' },
+  { href: '/designers', label: 'Applications' },
   { href: '/customers', label: 'Customers' },
 ];
 
