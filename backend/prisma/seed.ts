@@ -101,6 +101,19 @@ async function main(): Promise<void> {
     });
   }
 
+  // --- Demo banners for the home swiper -------------------------------------
+  const banners = [
+    { id: '00000000-0000-4000-8000-0000000000b1', imageUrl: 'https://picsum.photos/seed/artlavka-promo1/1200/600', sortOrder: 1 },
+    { id: '00000000-0000-4000-8000-0000000000b2', imageUrl: 'https://picsum.photos/seed/artlavka-promo2/1200/600', sortOrder: 2 },
+  ];
+  for (const b of banners) {
+    await prisma.banner.upsert({
+      where: { id: b.id },
+      update: { active: true },
+      create: { id: b.id, imageUrl: b.imageUrl, linkType: 'none', sortOrder: b.sortOrder, active: true },
+    });
+  }
+
   // --- Demo storefront (so the catalog/home actually show products) ---------
   const demoUser = await prisma.user.upsert({
     where: { phone: '+998900000001' },

@@ -109,5 +109,16 @@
   "profileLanguage": "Til",
   "profileBecomeSeller": "Sotuvchi bo'lish",
   "profileBecomeSellerHint": "Dizayn yuklash va sotish uchun ART-LAVKA Studio ilovasidan foydalaning.",
-  "homeEmpty": "Bu yerda hozircha bo'sh — katalogni ko'ring."
+  "homeEmpty": "Bu yerda hozircha bo'sh — katalogni ko'ring.",
+
+  "homeBestSellers": "Eng ko'p sotilganlar",
+  "homeRecommended": "Siz uchun tavsiya",
+  "profileEditName": "Ismni tahrirlash",
+  "profileSave": "Saqlash",
+  "profileCancel": "Bekor qilish",
+  "profileMyOrders": "Buyurtmalarim",
+  "profileAddresses": "Manzillar",
+  "profileAbout": "Ilova haqida",
+  "profileComingSoon": "Tez orada",
+  "profileAboutBody": "ART-LAVKA — O'zbekiston uchun talab bo'yicha bosma marketpleysi."
 }

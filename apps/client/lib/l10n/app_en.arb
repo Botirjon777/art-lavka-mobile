@@ -127,5 +127,16 @@
   "profileLanguage": "Language",
   "profileBecomeSeller": "Become a seller",
   "profileBecomeSellerHint": "Use the ART-LAVKA Studio app to upload designs and sell.",
-  "homeEmpty": "Nothing here yet — browse the catalog."
+  "homeEmpty": "Nothing here yet — browse the catalog.",
+
+  "homeBestSellers": "Best sellers",
+  "homeRecommended": "Recommended for you",
+  "profileEditName": "Edit name",
+  "profileSave": "Save",
+  "profileCancel": "Cancel",
+  "profileMyOrders": "My orders",
+  "profileAddresses": "Addresses",
+  "profileAbout": "About",
+  "profileComingSoon": "Coming soon",
+  "profileAboutBody": "ART-LAVKA — print-on-demand marketplace for Uzbekistan."
 }
