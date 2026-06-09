@@ -12,6 +12,25 @@ export class DesignersService {
     return this.prisma.designerProfile.findUnique({ where: { userId } });
   }
 
+  /// The caller's portfolio + earnings stats (Studio dashboard).
+  async meStats(userId: string) {
+    const [designs, listings, sales, balance] = await Promise.all([
+      this.prisma.design.count({ where: { designerId: userId } }),
+      this.prisma.listing.count({ where: { design: { designerId: userId } } }),
+      this.prisma.orderItem.count({ where: { designerId: userId } }),
+      this.prisma.ledgerEntry.aggregate({
+        _sum: { amount: true },
+        where: { designerId: userId },
+      }),
+    ]);
+    return {
+      designs,
+      listings,
+      sales,
+      balanceUzs: balance._sum.amount ?? 0n,
+    };
+  }
+
   /**
    * Submit/refresh seller onboarding (SPEC §9). Records KYC + the accepted
    * contract version + regulations hash + typed signature, sets status to

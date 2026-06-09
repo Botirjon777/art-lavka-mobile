@@ -16,6 +16,11 @@ export class DesignersController {
     return this.designers.meProfile(user.id);
   }
 
+  @Get('me/stats')
+  meStats(@CurrentUser() user: AuthUser) {
+    return this.designers.meStats(user.id);
+  }
+
   @Post('onboard')
   onboard(@CurrentUser() user: AuthUser, @Body() dto: OnboardDto) {
     return this.designers.onboard(user.id, dto);
