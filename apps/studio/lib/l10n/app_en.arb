@@ -62,6 +62,7 @@
   "fieldProduct": "Product",
   "fieldRoyalty": "Royalty (UZS)",
   "uploadSubmit": "Submit for review",
+  "uploadPickImage": "Choose image",
   "designStatusDraft": "Draft",
   "designStatusPending": "In review",
   "designStatusApproved": "Live",

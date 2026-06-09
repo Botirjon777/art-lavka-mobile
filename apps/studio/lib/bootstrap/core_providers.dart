@@ -44,6 +44,9 @@ final earningsRepositoryProvider = Provider<EarningsRepository>(
 final payoutRepositoryProvider = Provider<PayoutRepository>(
   (ref) => _requireCore(ref).payouts,
 );
+final storageServiceProvider = Provider<StorageService>(
+  (ref) => _requireCore(ref).storage,
+);
 
 /// App-wide session (auth + KYC profile) the router watches.
 final appSessionProvider = Provider<AppSession>((ref) {

@@ -45,6 +45,24 @@ export class EnvVars {
   @IsOptional()
   @IsString()
   MOCK_SMS: string = 'true';
+
+  // --- Cloudinary (signed uploads for designer print files) ----------------
+  /** 'true' enables signed Cloudinary uploads; otherwise storage stays mock. */
+  @IsOptional()
+  @IsString()
+  USE_CLOUDINARY: string = 'false';
+
+  @IsOptional()
+  @IsString()
+  CLOUDINARY_CLOUD_NAME?: string;
+
+  @IsOptional()
+  @IsString()
+  CLOUDINARY_API_KEY?: string;
+
+  @IsOptional()
+  @IsString()
+  CLOUDINARY_API_SECRET?: string;
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvVars {
