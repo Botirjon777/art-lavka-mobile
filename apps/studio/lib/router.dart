@@ -4,18 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'bootstrap/core_providers.dart';
 import 'features/auth/login_page.dart';
 import 'features/auth/otp_page.dart';
-import 'features/home/dashboard_page.dart';
+import 'features/designs/designs_page.dart';
+import 'features/designs/new_design_page.dart';
+import 'features/earnings/earnings_page.dart';
 import 'features/onboarding/onboarding_page.dart';
 import 'features/onboarding/pending_page.dart';
 import 'features/splash/splash_page.dart';
+import 'features/stats/stats_page.dart';
+import 'ui/scaffold_with_nav.dart';
 
 const _authRoutes = {'/login', '/otp'};
 
-/// Studio router with the strict KYC gate (SPEC §9):
-/// - signed out → only auth routes, else `/login`
-/// - signed in, not onboarded → `/onboarding`
-/// - signed in, pending → `/pending`
-/// - signed in, verified → `/dashboard`
+/// Studio router with the splash + strict KYC gate (SPEC §9). The verified seller
+/// area is a bottom-nav shell: Designs / Earnings / Stats.
 final routerProvider = Provider<GoRouter>((ref) {
   final session = ref.read(appSessionProvider);
 
@@ -25,12 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final loc = state.matchedLocation;
 
-      // Hold on the splash until its animation completes.
       if (!session.splashDone) return loc == '/splash' ? null : '/splash';
-      if (loc == '/splash') {
-        return session.isSignedIn ? '/onboarding' : '/login';
-      }
-
       if (!session.isSignedIn) {
         return _authRoutes.contains(loc) ? null : '/login';
       }
@@ -40,11 +36,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (!session.isVerified) {
         return loc == '/pending' ? null : '/pending';
       }
-      // Verified → dashboard; bounce away from gate/auth routes.
-      if (_authRoutes.contains(loc) ||
+      // Verified → seller area; bounce splash/auth/gate routes to Designs.
+      if (loc == '/splash' ||
+          _authRoutes.contains(loc) ||
           loc == '/onboarding' ||
           loc == '/pending') {
-        return '/dashboard';
+        return '/designs';
       }
       return null;
     },
@@ -54,7 +51,32 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/otp', builder: (_, _) => const OtpPage()),
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingPage()),
       GoRoute(path: '/pending', builder: (_, _) => const PendingPage()),
-      GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
+
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => ScaffoldWithNav(shell: shell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/designs', builder: (_, _) => const DesignsPage()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/earnings',
+                builder: (_, _) => const EarningsPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/stats', builder: (_, _) => const StatsPage()),
+            ],
+          ),
+        ],
+      ),
+
+      GoRoute(path: '/designs/new', builder: (_, _) => const NewDesignPage()),
     ],
   );
 });

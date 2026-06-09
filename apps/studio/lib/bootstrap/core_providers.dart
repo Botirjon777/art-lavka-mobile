@@ -23,6 +23,28 @@ final designerRepositoryProvider = Provider<DesignerRepository>((ref) {
   return core.designer;
 });
 
+// --- Dashboard repositories (require a configured backend) ----------------
+ArtlavkaCore _requireCore(Ref ref) {
+  final core = ref.watch(coreProvider);
+  if (core == null) {
+    throw StateError('This feature needs --dart-define=API_BASE_URL=...');
+  }
+  return core;
+}
+
+final designRepositoryProvider = Provider<DesignRepository>(
+  (ref) => _requireCore(ref).designs,
+);
+final catalogRepositoryProvider = Provider<CatalogRepository>(
+  (ref) => _requireCore(ref).catalog,
+);
+final earningsRepositoryProvider = Provider<EarningsRepository>(
+  (ref) => _requireCore(ref).earnings,
+);
+final payoutRepositoryProvider = Provider<PayoutRepository>(
+  (ref) => _requireCore(ref).payouts,
+);
+
 /// App-wide session (auth + KYC profile) the router watches.
 final appSessionProvider = Provider<AppSession>((ref) {
   final session = AppSession();

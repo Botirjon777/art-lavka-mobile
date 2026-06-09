@@ -11,6 +11,11 @@ class MockDesignerRepository extends DesignerRepository {
   Future<Result<DesignerProfile?>> myProfile() async => Success(_profile);
 
   @override
+  Future<Result<DesignerStats>> stats() async => const Success(
+    DesignerStats(designs: 0, listings: 0, sales: 0, balanceUzs: 0),
+  );
+
+  @override
   Future<Result<DesignerProfile>> onboard({
     required String displayName,
     required String legalName,
