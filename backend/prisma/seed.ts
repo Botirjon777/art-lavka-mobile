@@ -101,6 +101,15 @@ async function main(): Promise<void> {
     });
   }
 
+  // --- Admin user (log in to the web panel with this phone) -----------------
+  // OTP is delivered to Telegram / server logs; this just grants the role.
+  const adminPhone = process.env.ADMIN_PHONE ?? '+998900000000';
+  await prisma.user.upsert({
+    where: { phone: adminPhone },
+    update: { role: 'admin' },
+    create: { phone: adminPhone, fullName: 'Admin', role: 'admin' },
+  });
+
   // --- Demo banners for the home swiper -------------------------------------
   const banners = [
     { id: '00000000-0000-4000-8000-0000000000b1', imageUrl: 'https://picsum.photos/seed/artlavka-promo1/1200/600', sortOrder: 1 },
