@@ -19,8 +19,8 @@ export class SmsService {
 
   constructor(config: ConfigService) {
     this.mock = (config.get<string>('MOCK_SMS') ?? 'true') === 'true';
-    this.telegramToken = config.get<string>('TELEGRAM_BOT_TOKEN');
-    this.telegramChatId = config.get<string>('TELEGRAM_CHAT_ID');
+    this.telegramToken = this.clean(config.get<string>('TELEGRAM_BOT_TOKEN'));
+    this.telegramChatId = this.clean(config.get<string>('TELEGRAM_CHAT_ID'));
   }
 
   async sendOtp(phone: string, code: string): Promise<void> {
@@ -31,7 +31,11 @@ export class SmsService {
         await this.sendTelegram(text);
         return;
       } catch (error) {
-        this.logger.error(`Telegram send failed: ${String(error)}`);
+        // Log token LENGTH (not the secret) so a malformed env value is obvious.
+        this.logger.error(
+          `Telegram send failed (tokenLen=${this.telegramToken.length}, ` +
+            `chatId=${this.telegramChatId}): ${String(error)}`,
+        );
         // fall through to the mock log so testing isn't blocked
       }
     }
@@ -54,5 +58,15 @@ export class SmsService {
     if (!res.ok) {
       throw new Error(`Telegram API ${res.status}`);
     }
+  }
+
+  /** Strip surrounding quotes/whitespace that often sneak into env values. */
+  private clean(value?: string): string | undefined {
+    if (value == null) return undefined;
+    const trimmed = value
+      .trim()
+      .replace(/^["']|["']$/g, '')
+      .trim();
+    return trimmed.length > 0 ? trimmed : undefined;
   }
 }
